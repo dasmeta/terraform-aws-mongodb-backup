@@ -17,6 +17,6 @@ services:
       AWS_DEFAULT_REGION: region
       S3_BUCKET: s3_bucket_name
       MAX_BACKUPS: 30
-      CRON_TIME: "3 * * * *"
+      CRON_TIME: "* */3 * * *"
       INIT_BACKUP: 'false'
       INIT_RESTORE: 'false'

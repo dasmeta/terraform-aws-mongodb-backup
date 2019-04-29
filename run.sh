@@ -10,7 +10,10 @@ MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME:-""}
 MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD:-""}
 
 #BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${MONGODB_HOST} --port ${MONGODB_PORT} ${USER_STR}${PASS_STR}${DB_STR} ${EXTRA_OPTS}"
-BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --authenticationDatabase admin"
+BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT}"
+if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_PASS}" ]]; then
+    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --authenticationDatabase admin"
+fi
 
 rm -f /backup.sh
 cat <<EOF >> /backup.sh
