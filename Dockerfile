@@ -18,6 +18,4 @@ COPY migrate_backup_aws.sh restore.sh run.sh tmp_mongo_user.js /
 
 RUN chmod +x /run.sh
 
-ENV CRON_TIME='0 0 * * *'
-
 ENTRYPOINT ["/bin/bash", "/run.sh"]
