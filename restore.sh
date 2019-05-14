@@ -39,6 +39,12 @@ NEWEST_ON_BUCKET=$(aws s3 ls ${STORAGE} --recursive | sort | tail -n 1 | awk '{p
 
 COMMAND="aws s3 cp s3://${STORAGE}/${NEWEST_ON_BUCKET} /${NEWEST_ON_BUCKET}"
 
+RESTORE_CMD="mongorestore --host ${HOST} --port ${PORT} --drop ${RESTORE_DIR}"
+
+if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_PASS}" ]]; then
+    RESTORE_CMD="mongorestore --host ${HOST} --port ${PORT} -u ${MONGODB_USER} -p ${MONGODB_PASS} --authenticationDatabase admin --drop ${RESTORE_DIR}"
+fi
+
 if [[ -n "${STORAGE}" ]]; then
     BACKUP_DIR="/restore"
     echo "=> Getting the newest backup file from AWS S3 Bucket"
@@ -66,13 +72,7 @@ fi
 
 if [[ -n "${BACKUP_FILE}" ]]; then
     echo "=> The latest backup is:    ${BACKUP_FILE}"
-    if mongorestore --host ${HOST} \
-                    --port ${PORT} \
-                    -u ${MONGODB_USER} \
-                    -p ${MONGODB_PASS} \
-                    --authenticationDatabase admin \
-                    --drop \
-                    ${RESTORE_DIR}; then
+    if ${RESTORE_CMD}; then
         echo "=> Restore succeeded"
     else
         echo "=> Restore failed"
