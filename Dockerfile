@@ -1,9 +1,9 @@
 FROM bitnami/minideb:jessie
-LABEL maintainer="Razmik Avetikyan <razmik.avetikyan@fouraitch.com>"
+LABEL maintainer="Razmik Avetikyan <razmik.avetikyan@dasmeta.com>"
 
 #RUN install_packages apt-transport-https cron curl zip lsb-release unzip
 RUN install_packages zip unzip cron python3-pip groff
-RUN pip3 install awscli
+RUN pip3 install awscli typing
 #RUN curl --insecure "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 #RUN unzip awscli-bundle.zip
 #RUN ./awscli-bundle/install -b ~/bin/aws

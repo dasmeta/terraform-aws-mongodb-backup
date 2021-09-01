@@ -5,7 +5,7 @@ There is a possibility of the subsequent shipping to Amazon S3 Bucket.
 # Usage
 To backup a Mongo DB container you simply have to build Docker image from following source.
 
-[Visit our GitHub repository](https://github.com/fouraitch/mongo_backup_aws.git)
+[Visit our GitHub repository](https://github.com/dasmeta/mongo_backup_aws.git)
 
 
     docker build -t image_name .
@@ -54,3 +54,6 @@ mongo_backup:
 |`INIT_RESTORE`|(Optional) To make mongo restore on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be downloaded from bucket. Otherwise, database will be restored from the local volume.|
 
 It would be better to write environment variables in `.env` file.
+
+## How to helm
+`helm upgrade --install mongodb-backup-aws .`
