@@ -7,11 +7,18 @@ HOST=${MONGODB_HOST:-""}
 
 MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME:-""}
 MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD:-""}
-
+MONGO_DATABASE=${MONGO_DATABASE:-""}
+MONGO_EXCLUDE_COLLECTIONS=${MONGO_EXCLUDE_COLLECTIONS:-""}
 #BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${MONGODB_HOST} --port ${MONGODB_PORT} ${USER_STR}${PASS_STR}${DB_STR} ${EXTRA_OPTS}"
 BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT}"
-if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_PASS}" ]]; then
-    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --authenticationDatabase admin"
+if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGO_DATABASE}" ]] && [[ -n "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
+    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --db ${MONGO_DATABASE}  --collection ${MONGO_EXCLUDE_COLLECTIONS} --authenticationDatabase admin"
+fi
+if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGO_DATABASE}" ]] && [[ -z "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
+    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --db ${MONGO_DATABASE}  --authenticationDatabase admin"
+fi
+if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_PASS}" ]] && [[ -z "${MONGO_DATABASE}" ]] && [[ -z "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
+     BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --authenticationDatabase admin"
 fi
 
 rm -f /backup.sh
@@ -65,8 +72,18 @@ if [[ "${INIT_RESTORE}" = true ]]; then
     /restore.sh
 fi
 
+
 echo "${CRON_TIME} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
+
 #echo "${MIGRATE_CRON_TIME} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
-crontab  /crontab.conf
+
+
+
+if [ "$RUN_AS_DAEMON" = true ]; then
+    /etc/environment; /backup.sh
+else
+    crontab  /crontab.conf
+fi
+
 echo "=> Running cron job"
 exec cron -f

@@ -96,3 +96,6 @@ config:
   CRON_TIME: "3 0 * * *"
   INIT_BACKUP: "true"
   INIT_RESTORE: "false"
+  MONGO_DATABASE: "admin"
+  MONGO_EXCLUDE_COLLECTIONS: ""
+  RUN_AS_DAEMON: "true"
