@@ -3,22 +3,33 @@
 env > /etc/environment
 
 PORT=${MONGODB_PORT:-27017}
-HOST=${MONGODB_HOST:-""}
+HOST=${MONGODB_HOST:-"localhost"}
+AUTH_DB=${MONGODB_AUTH_DB:-"admin"}
 
-MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME:-""}
-MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD:-""}
-MONGO_DATABASE=${MONGO_DATABASE:-""}
-MONGO_EXCLUDE_COLLECTIONS=${MONGO_EXCLUDE_COLLECTIONS:-""}
-#BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${MONGODB_HOST} --port ${MONGODB_PORT} ${USER_STR}${PASS_STR}${DB_STR} ${EXTRA_OPTS}"
-BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT}"
-if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGO_DATABASE}" ]] && [[ -n "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
-    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --db ${MONGO_DATABASE}  --collection ${MONGO_EXCLUDE_COLLECTIONS} --authenticationDatabase admin"
+MONGODB_USER=${MONGODB_INITDB_ROOT_USERNAME:-""}
+MONGODB_PASS=${MONGODB_INITDB_ROOT_PASSWORD:-""}
+MONGODB_DATABASE=${MONGODB_DATABASE:-""}
+MONGODB_EXCLUDE_COLLECTIONS=${MONGODB_EXCLUDE_COLLECTIONS:-""}
+BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${HOST} --port ${PORT} --authenticationDatabase ${AUTH_DB} ${EXTRA_OPTS}"
+
+if [[ -n "${MONGODB_USER}" ]]; then
+    BACKUP_CMD="${BACKUP_CMD}  --username ${MONGODB_USER}"
 fi
-if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGO_DATABASE}" ]] && [[ -z "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
-    BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --db ${MONGO_DATABASE}  --authenticationDatabase admin"
+
+if [[ -n "${MONGODB_PASS}" ]]; then
+    BACKUP_CMD="${BACKUP_CMD}  --password ${MONGODB_PASS}"
 fi
-if [[ -n "${MONGODB_USER}" ]] && [[ -n "${MONGODB_PASS}" ]] && [[ -z "${MONGO_DATABASE}" ]] && [[ -z "${MONGO_EXCLUDE_COLLECTIONS}" ]]; then
-     BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --host ${HOST} --port ${PORT} --username ${MONGODB_USER} --password ${MONGODB_PASS} --authenticationDatabase admin"
+
+if [[ -n "${MONGODB_DATABASE}" ]]; then
+    BACKUP_CMD="${BACKUP_CMD}  --db ${MONGODB_DATABASE}"
+fi
+
+if [[ -n "${MONGODB_EXCLUDE_COLLECTIONS}" ]]; then
+    echo $MONGODB_EXCLUDE_COLLECTIONS
+    for COLLECTON in $(echo $MONGODB_EXCLUDE_COLLECTIONS | tr "," "\n")
+    do
+        BACKUP_CMD="${BACKUP_CMD} --collection ${COLLECTON}"
+    done
 fi
 
 rm -f /backup.sh
@@ -54,9 +65,7 @@ fi
 EOF
 
 chmod +x /backup.sh
-
 chmod +x /restore.sh
-
 chmod +x /migrate_backup_aws.sh
 
 touch /mongo_backup.log
@@ -72,18 +81,14 @@ if [[ "${INIT_RESTORE}" = true ]]; then
     /restore.sh
 fi
 
-
 echo "${CRON_TIME} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
-
 #echo "${MIGRATE_CRON_TIME} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
 
-
-
 if [ "$RUN_AS_DAEMON" = true ]; then
-    /etc/environment; /backup.sh
+    crontab /crontab.conf
+    echo "=> Running cron job"
+    exec cron -f
 else
-    crontab  /crontab.conf
+    echo "=> Running backup job"
+    /etc/environment; /backup.sh
 fi
-
-echo "=> Running cron job"
-exec cron -f
