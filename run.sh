@@ -81,8 +81,8 @@ if [[ "${INIT_RESTORE}" = true ]]; then
     /restore.sh
 fi
 
-echo "${CRON_TIME} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
-#echo "${MIGRATE_CRON_TIME} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
+echo "${CRON_SCHEDULE} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
+#echo "${CRON_SCHEDULE} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
 
 if [ "$RUN_AS_DAEMON" = true ]; then
     crontab /crontab.conf

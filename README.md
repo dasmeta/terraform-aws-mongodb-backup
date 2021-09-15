@@ -31,7 +31,7 @@ mongo_backup:
     AWS_DEFAULT_REGION: region
     S3_BUCKET: s3_bucket_name
     MAX_BACKUPS: 30
-    CRON_TIME: "3 * * * *"
+    CRON_SCHEDULE: "3 * * * *"
     INIT_BACKUP: 'false'
     INIT_RESTORE: 'false'
 ```
@@ -49,7 +49,7 @@ mongo_backup:
 |`AWS_DEFAULT_REGION`|(required) Set aws default region. See [Amazon Web Services](https://console.aws.amazon.com/)|
 |`S3_BUCKET`|(Optional) If bucket variable is set the backups will be shipped/restored to/from Amazon S3 Bucket. `Otherwise It will be saved locally.`|
 |`MAX_BACKUPS`| (Optional) Count of maximum backups on local machine. `Necessary if S3_BUCKET variable is not set. Default value is 30`|
-|`CRON_TIME`| Please visit [CRON TIME](https://crontab.guru/) to choose your specific schedule time.|
+|`CRON_SCHEDULE`| Please visit [CRON SCHEDULE](https://crontab.guru/) to choose your specific schedule time.|
 |`INIT_BACKUP`|(Optional) To make mongo backup on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be shipped to bucket. Otherwise, database will be saved on local volume.|
 |`INIT_RESTORE`|(Optional) To make mongo restore on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be downloaded from bucket. Otherwise, database will be restored from the local volume.|
 
