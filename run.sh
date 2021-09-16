@@ -25,12 +25,13 @@ if [[ -n "${MONGODB_DATABASE}" ]]; then
 fi
 
 if [[ -n "${MONGODB_EXCLUDE_COLLECTIONS}" ]]; then
-    echo $MONGODB_EXCLUDE_COLLECTIONS
     for COLLECTON in $(echo $MONGODB_EXCLUDE_COLLECTIONS | tr "," "\n")
     do
         BACKUP_CMD="${BACKUP_CMD} --collection ${COLLECTON}"
     done
 fi
+
+echo $BACKUP_CMD
 
 rm -f /backup.sh
 cat <<EOF >> /backup.sh
@@ -69,7 +70,7 @@ chmod +x /restore.sh
 chmod +x /migrate_backup_aws.sh
 
 touch /mongo_backup.log
-tail -F /mongo_backup.log &
+# tail -F /mongo_backup.log &
 
 if [[ "${INIT_BACKUP}" = true ]]; then
     echo "=> Creating a backup on startup"
@@ -81,14 +82,13 @@ if [[ "${INIT_RESTORE}" = true ]]; then
     /restore.sh
 fi
 
-echo "${CRON_SCHEDULE} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
-#echo "${CRON_SCHEDULE} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
-
 if [ "$RUN_AS_DAEMON" = true ]; then
+    echo "${CRON_SCHEDULE} . /etc/environment; /backup.sh >> /mongo_backup.log 2>&1" > /crontab.conf
+    #echo "${CRON_SCHEDULE} /migrate_backup_aws.sh >> /mongo_backup.log 2>&1" >> /crontab.conf
     crontab /crontab.conf
     echo "=> Running cron job"
     exec cron -f
 else
     echo "=> Running backup job"
-    /etc/environment; /backup.sh
+    /backup.sh
 fi
