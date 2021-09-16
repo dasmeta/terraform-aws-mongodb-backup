@@ -27,11 +27,16 @@ fi
 if [[ -n "${MONGODB_EXCLUDE_COLLECTIONS}" ]]; then
     for COLLECTON in $(echo $MONGODB_EXCLUDE_COLLECTIONS | tr "," "\n")
     do
-        BACKUP_CMD="${BACKUP_CMD} --collection ${COLLECTON}"
+        BACKUP_CMD="${BACKUP_CMD} --excludeCollection ${COLLECTON}"
     done
 fi
 
-echo $BACKUP_CMD
+if [[ -n "${MONGODB_COLLECTIONS}" ]]; then
+    for COLLECTON in $(echo $MONGODB_COLLECTIONS | tr "," "\n")
+    do
+        BACKUP_CMD="${BACKUP_CMD} --collection ${COLLECTON}"
+    done
+fi
 
 rm -f /backup.sh
 cat <<EOF >> /backup.sh
@@ -40,6 +45,7 @@ MAX_BACKUPS=${MAX_BACKUPS:-"30"}
 BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
 
 echo "=> Backup started"
+echo $BACKUP_CMD
 if ${BACKUP_CMD} ; then
     echo "   Backup succeeded"
 else
