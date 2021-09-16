@@ -16,13 +16,14 @@ services:
     environment:
       MONGODB_HOST: host
       MONGODB_PORT: port
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGODB_INITDB_ROOT_USERNAME: root
+      MONGODB_INITDB_ROOT_PASSWORD: example
       AWS_ACCESS_KEY_ID: account_key_id
       AWS_SECRET_ACCESS_KEY: secret_access_key
       AWS_DEFAULT_REGION: region
       S3_BUCKET: s3_bucket_name
       MAX_BACKUPS: 30
-      CRON_TIME: "* */3 * * *"
+      CRON_SCHEDULE: "* */3 * * *"
+      RUN_AS_DAEMON: true
       INIT_BACKUP: 'false'
       INIT_RESTORE: 'false'

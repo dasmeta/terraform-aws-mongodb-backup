@@ -8,7 +8,7 @@ image:
   repository: dasmeta/mongo-backup-aws
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.0.4
+  tag: 1.0.18
 
 imagePullSecrets: []
 nameOverride: ""
@@ -86,13 +86,16 @@ volume:
 config:
   MONGODB_HOST: your-mongodb-host-name
   MONGODB_PORT: "27017"
-  MONGO_INITDB_ROOT_USERNAME: root
-  MONGO_INITDB_ROOT_PASSWORD: mongo-backup-user-password
+  MONGODB_INITDB_ROOT_USERNAME: root
+  MONGODB_INITDB_ROOT_PASSWORD: mongo-backup-user-password
+  MONGODB_DATABASE: "admin"
+  MONGODB_EXCLUDE_COLLECTIONS: ""
   AWS_ACCESS_KEY_ID: aws-access-key-id
   AWS_SECRET_ACCESS_KEY: aws-secret-key-id
   AWS_DEFAULT_REGION: eu-central-1
   S3_BUCKET: s3-bucket-name-where-backups-will-be-stored
   MAX_BACKUPS: "30"
-  CRON_TIME: "3 0 * * *"
-  INIT_BACKUP: "true"
+  CRON_SCHEDULE: "3 0 * * *"
+  RUN_AS_DAEMON: "false"
+  INIT_BACKUP: "false"
   INIT_RESTORE: "false"
