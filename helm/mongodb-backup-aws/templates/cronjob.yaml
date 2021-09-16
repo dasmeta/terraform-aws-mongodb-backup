@@ -1,4 +1,4 @@
-{{- if not .Values.config.RUN_AS_DAEMON }}
+{{- if eq .Values.config.RUN_AS_DAEMON "false" }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -6,7 +6,9 @@ metadata:
   labels:
     {{- include "mongodb-backup-aws.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Value.config.CRON_SCHEDULE }}
+  schedule: "{{ .Values.config.CRON_SCHEDULE }}"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
   jobTemplate:
     spec:
       template:
@@ -14,11 +16,11 @@ spec:
           containers:
           - name: {{ .Chart.Name }}
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-            command: ["/bin/bash", "-c", "/etl/bash/copy_mongo_to_postgres.sh"]
+            # command: ["/bin/bash", "-c", "/etl/bash/copy_mongo_to_postgres.sh"]
             envFrom:
             - configMapRef:
-              name: {{ include "mongodb-backup-aws.fullname" . }}
+                name: {{ include "mongodb-backup-aws.fullname" . }}
             resources:
-              {{- toYaml .Values.resources | nindent 12 }}
-          restartPolicy: OnFailure
+              {{- toYaml .Values.resources | nindent 14 }}
+          restartPolicy: Never
 {{- end }}

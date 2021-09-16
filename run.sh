@@ -45,7 +45,6 @@ MAX_BACKUPS=${MAX_BACKUPS:-"30"}
 BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
 
 echo "=> Backup started"
-echo $BACKUP_CMD
 if ${BACKUP_CMD} ; then
     echo "   Backup succeeded"
 else

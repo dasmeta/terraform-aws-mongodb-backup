@@ -8,7 +8,7 @@ image:
   repository: dasmeta/mongo-backup-aws
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.0.17
+  tag: 1.0.18
 
 imagePullSecrets: []
 nameOverride: ""
@@ -96,6 +96,6 @@ config:
   S3_BUCKET: s3-bucket-name-where-backups-will-be-stored
   MAX_BACKUPS: "30"
   CRON_SCHEDULE: "3 0 * * *"
-  RUN_AS_DAEMON: false
-  INIT_BACKUP: "true"
+  RUN_AS_DAEMON: "false"
+  INIT_BACKUP: "false"
   INIT_RESTORE: "false"
