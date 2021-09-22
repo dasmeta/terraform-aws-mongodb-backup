@@ -8,11 +8,7 @@ image:
   repository: dasmeta/mongo-backup-aws
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-<<<<<<< HEAD
-  tag: 1.0.4
-=======
   tag: 1.0.18
->>>>>>> 06de25fa1ecb1b3edb793a0ed3afd5e8a7005432
 
 imagePullSecrets: []
 nameOverride: ""
