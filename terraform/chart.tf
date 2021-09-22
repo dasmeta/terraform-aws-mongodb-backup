@@ -39,11 +39,11 @@ module "release" {
   set_sensitive = [
     {
       path  = "config.AWS_ACCESS_KEY_ID"
-      value = var.aws-access-key-id
+      value = module.iam_user.iam_access_key_id # var.aws-access-key-id ==""? module.iam_user.iam_access_key_id : var.aws-access-key-id
     },
     {
       path  = "config.AWS_SECRET_ACCESS_KEY"
-      value = var.aws-secret-access-key
+      value = nonsensitive(module.iam_user.iam_access_key_secret) # var.aws-secret-access-key =="" ? nonsensitive(module.iam_user.iam_access_key_secret) : var.aws-secret-access-key
     },
     {
       path  = "config.MONGO_INITDB_ROOT_USERNAME"
