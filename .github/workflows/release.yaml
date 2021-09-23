@@ -20,9 +20,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Run Release
-        uses: helm/chart-releaser-action@v1.2.1
-        with:
-          charts_dir: helm/mongo-backup-aws
-          config: .github/verify-config.yaml
+        uses: helm/chart-releaser-action@v1.0.0
         env:
-          CR_TOKEN: '${{ secrets.API_GITHUB_TOKEN }}'
+          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
