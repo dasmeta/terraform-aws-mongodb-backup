@@ -1,3 +1,4 @@
 some text file 
 a new line
 hope the last line 
+that wasn't the last line
