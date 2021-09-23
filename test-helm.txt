@@ -1,2 +1,3 @@
 some text file 
 a new line
+hope the last line 
