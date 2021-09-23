@@ -32,7 +32,15 @@ module "release" {
     },
     {
       name  = "config.INIT_BACKUP"
-      value = var.backup-on-start
+      value = var.backup-on-start ? "\"true\"" : "\"false\""
+    },
+    {
+      name  = "config.MONGODB_DATABASE"
+      value = var.mongodb-database
+    },
+    {
+      name  = "config.MONGODB_EXCLUDE_COLLECTIONS"
+      value = var.mongodb-exclude-collections
     },
   ]
 
