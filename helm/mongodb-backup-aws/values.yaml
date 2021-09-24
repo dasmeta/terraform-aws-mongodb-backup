@@ -84,18 +84,18 @@ volume:
   size: 10Gi
 
 config:
-  MONGODB_HOST: your-mongodb-host-name
+  MONGODB_HOST: "10.107.194.125"
   MONGODB_PORT: "27017"
-  MONGODB_INITDB_ROOT_USERNAME: root
-  MONGODB_INITDB_ROOT_PASSWORD: mongo-backup-user-password
+  MONGODB_INITDB_ROOT_USERNAME: "root"
+  MONGODB_INITDB_ROOT_PASSWORD: "MONGODB_INITDB_ROOT_PASSWORD"
   MONGODB_DATABASE: "admin"
   MONGODB_EXCLUDE_COLLECTIONS: ""
-  AWS_ACCESS_KEY_ID: aws-access-key-id
-  AWS_SECRET_ACCESS_KEY: aws-secret-key-id
-  AWS_DEFAULT_REGION: eu-central-1
-  S3_BUCKET: s3-bucket-name-where-backups-will-be-stored
+  AWS_ACCESS_KEY_ID: "AWS_ACCESS_KEY_ID"
+  AWS_SECRET_ACCESS_KEY: "AWS_SECRET_ACCESS_KEY"
+  AWS_DEFAULT_REGION: "us-east-2"
+  S3_BUCKET: "mongo-backup-1q2w"
   MAX_BACKUPS: "30"
-  CRON_SCHEDULE: "3 0 * * *"
+  CRON_SCHEDULE: "0/1 * * * *"
   RUN_AS_DAEMON: "false"
   INIT_BACKUP: "false"
   INIT_RESTORE: "false"

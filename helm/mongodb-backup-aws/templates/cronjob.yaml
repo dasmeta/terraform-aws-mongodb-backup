@@ -1,4 +1,4 @@
-{{- if eq .Values.config.RUN_AS_DAEMON "false" }}
+{{- if eq (.Values.config.RUN_AS_DAEMON | default "false") "true" }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:

@@ -19,6 +19,10 @@ variable s3-bucket {
   type        = string
   description = "The bucket backups will be stored."
 }
+variable backup_user_name {
+  type        = string
+  description = "backup_user_name."
+}
 
 variable schedule {
   type        = string
@@ -26,11 +30,11 @@ variable schedule {
   description = "Backup schedule, in crojob format. E.g. '3 0 * * *'"
 }
 
-variable backup-on-start {
-  type        = string
-  default     = true
-  description = "If enabled scripts will do backup right on the start and then according to the schedule."
-}
+# variable backup-on-start {
+#   type        = string
+#   default     = true
+#   description = "If enabled scripts will do backup right on the start and then according to the schedule."
+# }
 
 variable aws-access-key-id {
   type        = string
@@ -54,4 +58,59 @@ variable mongodb-password {
   type        = string
   description = "Mongodb user password script will need to pull data from mongodb."
   sensitive = true
+}
+variable mongodb-port {
+  type        = string
+  description = "mongodb-port."
+  
+}
+variable mongodb-database {
+  type        = string
+  description = "mongodb-database."
+  
+}
+variable mongodb-exclude-callection {
+  type        = string
+  description = "mongodb-exclude-callection."
+  
+}
+variable aws-default-region {
+  type        = string
+  description = "aws-default-region."
+  
+}
+variable max-backups {
+  type        = string
+  description = "max-backups."
+  
+}
+variable run-as-demond {
+  type        = string
+  description = "run-as-demond."
+  
+}
+variable init-backup {
+  type        = string
+  description = "init-backup."
+  
+}
+variable init-restore {
+  type        = string
+  description = "init-restore."
+  
+}
+variable create-user {
+  type        = bool
+  description = "create-user."
+  
+}
+variable create-iam-user-login-profile {
+  type        = bool
+  description = "create-iam-user-login-profile."
+  
+}
+variable create-iam-access-key {
+  type        = bool
+  description = "create-iam-access-key."
+  
 }

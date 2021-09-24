@@ -1,5 +1,6 @@
 
 resource "aws_iam_user_policy" "iam_user_policy" {
+  count = var.create-user ? 1 : 0
   name = "s3-buckert-mongo"
   user = module.iam_user.iam_user_name
   policy = jsonencode({

@@ -1,4 +1,4 @@
-{{- if eq .Values.config.RUN_AS_DAEMON "true" }}
+{{- if eq (.Values.config.RUN_AS_DAEMON | default "true" ) "false" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
