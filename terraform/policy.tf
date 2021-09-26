@@ -9,7 +9,7 @@ resource "aws_iam_user_policy" "iam_user_policy" {
         {
             "Effect": "Allow",
             "Action": "s3:*",
-            "Resource": "*"
+            "Resource": "arn:aws:s3:::${var.s3-bucket}"
         }
     ]
 })

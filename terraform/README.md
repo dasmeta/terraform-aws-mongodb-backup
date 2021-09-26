@@ -16,7 +16,7 @@ module "mongo-backup" {
     mongodb-exclude-callection      = ""
     
     # Helm backup config
-    schedule                        = "0/1 * * * *"
+    schedule                        = "* * * * *"
     #backup-on-start                 = "true"
     max-backups                     = "30"
     run-as-demond                   = "true"
