@@ -4,7 +4,7 @@ name: Lint test charts
 on:
   pull_request:
     paths:
-      - 'charts/**'
+      - 'helm/**'
 
 jobs:
   lint:
