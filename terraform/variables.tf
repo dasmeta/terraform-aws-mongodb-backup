@@ -15,6 +15,18 @@ variable mongodb-host {
   description = "Mongodb host name backup script will be taking data from."
 }
 
+variable mongodb-database {
+  type        = string
+  default     = ""
+  description = "Mongodb database to be backed up. All databases will be backed up if not specified."
+}
+
+variable mongodb-exclude-collections {
+  type        = string
+  default     = ""
+  description = "Mongodb collections to be excluded from the backup. All collections will be backed up if not specified."
+}
+
 variable s3-bucket {
   type        = string
   description = "The bucket backups will be stored."
@@ -28,7 +40,7 @@ variable schedule {
 
 variable backup-on-start {
   type        = string
-  default     = true
+  default     = false
   description = "If enabled scripts will do backup right on the start and then according to the schedule."
 }
 
