@@ -10,7 +10,8 @@ module "mongo-backup" {
     mongodb-exclude-collections     = ""
 
     # Helm backup config
-    cron-schedule                   = ""    max-backups                     = ""
+    cron-schedule                   = ""    
+    max-backups                     = ""
     run-as-demond                   = ""
     init-backup                     = ""
     init-restore                    = ""
