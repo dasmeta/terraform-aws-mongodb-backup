@@ -1,7 +1,7 @@
 module "release" {
   source  = "terraform-module/release/helm"
     depends_on = [
-      module.iam_user
+      module.mongodb-backup-s3-storage-user
     ]
   version = "2.6.0"
 
@@ -13,7 +13,7 @@ module "release" {
     version       = "0.1.0"
     chart         = "${path.module}/../helm/mongodb-backup-aws"
     force_update  = true
-    wait          = true
+    wait          = false
     recreate_pods = false
     deploy        = 1
   }
@@ -78,11 +78,11 @@ module "release" {
   set_sensitive = [
     {
       path  = "config.AWS_ACCESS_KEY_ID"
-      value = "\"${module.iam_user.iam_access_key_id}\""
+      value = "\"${module.mongodb-backup-s3-storage-user.iam_access_key_id}\""
     },
     {
       path  = "config.AWS_SECRET_ACCESS_KEY"
-      value = "\"${module.iam_user.iam_access_key_secret}\""
+      value = "\"${module.mongodb-backup-s3-storage-user.iam_access_key_secret}\""
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_USERNAME"

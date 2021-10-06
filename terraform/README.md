@@ -1,5 +1,7 @@
-module "mongo-backup" {
-    source = ""
+```terraform
+
+module "mongodb-backup" {
+    source  = "dasmeta/mongodb-backup/aws"
 
     # MongoDB config
     mongodb-host                    = ""
@@ -21,3 +23,5 @@ module "mongo-backup" {
     s3-bucket                       = ""
     aws-default-region              = ""
 }
+
+```

@@ -1,8 +1,16 @@
-module "iam_user" {
-    source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-    version = "4.6.0"
-    name                          = var.backup_user_name
-    create_user                   = var.create-user
-    create_iam_user_login_profile = var.create-iam-user-login-profile
-    create_iam_access_key         = var.create-iam-access-key
+module "mongodb-backup-s3-storage-user" {
+  source          = "dasmeta/modules/aws//modules/aws-iam-user"
+  create_user     = var.create-user
+  username        = var.backup_user_name
+  console         = var.create-iam-user-login-profile
+  policy          = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::${var.s3-bucket}" # arn resource 
+        }
+    ]
+})
 }
