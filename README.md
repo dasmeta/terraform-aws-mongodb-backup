@@ -1,59 +1,71 @@
 # About
-The mongo_backup_aws Docker image will provide you a container to backup and restore a Mongo database.
-There is a possibility of the subsequent shipping to Amazon S3 Bucket.
+Helm chart install Terraform module to backup and restore a Mongo database.
 
-# Usage
-To backup a Mongo DB container you simply have to build Docker image from following source.
+## Usage
 
-[Visit our GitHub repository](https://github.com/dasmeta/mongo_backup_aws.git)
+`mongodb-backup-minimal`:
 
 
-    docker build -t image_name .
-    
-Please note the backup will be written to /backup by default, so you might want to mount that directory from your host.
+```hcl
 
-## Useful example via docker compose 
+module mongodb-backup-minimal {
+    source  = "dasmeta/mongodb-backup/aws"
+
+    mongodb-host                    = "localhost"
+    mongodb-username                = "root"
+    mongodb-password                = "password" 
+    cron-schedule                   = "0 3 * * *" # “every day at 03:00 am”
+    run-as-demond                   = "false"
+    init-backup                     = "false"
+    backup_user_name                = "aws-iam-user"
+    s3-bucket                       = "aws-s3-bucket-name" # it suppose this bucket already creaated
+}
 
 ```
-mongo_backup:
-  build:
-    context: .
-  container_name: mongodb_backup_migrate
-  volumes:
-    - ./backup:/backup
-  environment:
-    MONGODB_HOST: host
-    MONGODB_PORT: port
-    MONGO_INITDB_ROOT_USERNAME: user
-    MONGO_INITDB_ROOT_PASSWORD: password
-    AWS_ACCESS_KEY_ID: account_key_id
-    AWS_SECRET_ACCESS_KEY: secret_access_key
-    AWS_DEFAULT_REGION: region
-    S3_BUCKET: s3_bucket_name
-    MAX_BACKUPS: 30
-    CRON_SCHEDULE: "3 * * * *"
-    INIT_BACKUP: 'false'
-    INIT_RESTORE: 'false'
+`mongodb-backup-advanced`:
+
+
+```hcl
+
+module mongodb-backup-advanced {
+    source  = "dasmeta/mongodb-backup/aws"
+
+    # MongoDB config
+    mongodb-host                    = ""
+    mongodb-username                = ""
+    mongodb-password                = ""
+    mongodb-port                    = ""
+    mongodb-database                = ""
+    mongodb-exclude-collections     = ""
+
+    # Helm backup config
+    cron-schedule                   = ""    
+    max-backups                     = ""
+    run-as-demond                   = ""
+    init-backup                     = ""
+    init-restore                    = ""
+
+    # AWS S3 backet config
+    backup_user_name                = ""
+    s3-bucket                       = ""
+    aws-default-region              = ""
+}
+
 ```
 ### Environment variables
 
 #### `Note: Some variables are required` 
 | Environment Variables | Description |
 | ------ | ------ |
-|`MONGODB_HOST`|(required) This is gonna be Mongo database Host name|
-|`MONGODB_PORT`|(Optional) Mongo database host Port|
-|`MONGO_INITDB_ROOT_USERNAME`|(required) Mongo database username|
-|`MONGO_INITDB_ROOT_PASSWORD`|(required) Mongo database password|
-|`AWS_ACCESS_KEY_ID`|(required) Go to [Amazon Web Services](https://console.aws.amazon.com/) console and click on the name of your account (it is located in the top right corner of the console). Then, in the expanded drop-down list, select Security Credentials.|
-|`AWS_SECRET_ACCESS_KEY`|(required) Go to [Amazon Web Services](https://console.aws.amazon.com/) console and click on the name of your account (it is located in the top right corner of the console). Then, in the expanded drop-down list, select Security Credentials.|
-|`AWS_DEFAULT_REGION`|(required) Set aws default region. See [Amazon Web Services](https://console.aws.amazon.com/)|
-|`S3_BUCKET`|(Optional) If bucket variable is set the backups will be shipped/restored to/from Amazon S3 Bucket. `Otherwise It will be saved locally.`|
-|`MAX_BACKUPS`| (Optional) Count of maximum backups on local machine. `Necessary if S3_BUCKET variable is not set. Default value is 30`|
-|`CRON_SCHEDULE`| Please visit [CRON SCHEDULE](https://crontab.guru/) to choose your specific schedule time.|
-|`INIT_BACKUP`|(Optional) To make mongo backup on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be shipped to bucket. Otherwise, database will be saved on local volume.|
-|`INIT_RESTORE`|(Optional) To make mongo restore on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be downloaded from bucket. Otherwise, database will be restored from the local volume.|
-
-It would be better to write environment variables in `.env` file.
-
-## How to helm
-`helm upgrade --install mongodb-backup-aws .`
+|`mongodb-host`|(required) This is gonna be Mongo database Host name|
+|`mongodb-port`|(Optional) Mongo database host Port|
+|`mongodb-username`|(required) Mongo database username|
+|`mongodb-password`|(required) Mongo database password|
+|`aws-default-region`|(required) Set aws default region. See [Amazon Web Services](https://console.aws.amazon.com/)|
+|`backup_user_name`|(required) this is the aws user name to create and provide accesses for pushing backup to S3|
+|`s3-bucket`|(Optional) If bucket variable is set the backups will be shipped/restored to/from Amazon S3 Bucket. `Otherwise It will be saved locally.`|
+|`max-backups`| (Optional) Count of maximum backups on local machine. `Necessary if S3_BUCKET variable is not set. Default value is 30`|
+|`cron-schedule`| Please visit [CRON SCHEDULE](https://crontab.guru/) to choose your specific schedule time.|
+|`run-as-demond`| in casae this prop value is "true" the an "Deployment" kind (k8s  object type) will be created else wise the kind will be "CronJob".|
+|`init-backup`|(Optional) To make mongo backup on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be shipped to bucket. Otherwise, database will be saved on local volume.|
+|`init-restore`|(Optional) To make mongo restore on container startup mark value `true`. `Default is: 'false'`. If `S3_BUCKET` is set, the latest backup will be downloaded from bucket. Otherwise, database will be restored from the local volume.|

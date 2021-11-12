@@ -1,7 +1,7 @@
 VERSION := latest
 
 build:
-	docker build --platform linux/amd64 -t dasmeta/mongo-backup-aws:$(VERSION) .
+	docker build --platform linux/amd64 -t dasmeta/mongo-backup-aws:$(VERSION) ./docker
 
 publish:
 	docker push dasmeta/mongo-backup-aws:$(VERSION)
