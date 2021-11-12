@@ -11,7 +11,7 @@ module "release" {
   app = {
     name          = "mongodb-backup-aws"
     version       = "0.1.0"
-    chart         = "${path.module}/../helm/mongodb-backup-aws"
+    chart         = "${path.module}/helm/mongodb-backup-aws"
     force_update  = true
     wait          = false
     recreate_pods = false
