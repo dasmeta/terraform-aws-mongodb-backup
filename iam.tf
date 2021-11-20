@@ -1,16 +1,16 @@
-module "mongodb-backup-s3-storage-user" {
+module "mongodb_backup_s3_storage_user" {
   source          = "dasmeta/modules/aws//modules/aws-iam-user"
-  create_user     = var.create-user
+  create_user     = true
   username        = var.backup_user_name
-  console         = var.create-iam-user-login-profile
+  console         = false
   policy          = jsonencode({
     "Version": "2012-10-17",
     "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::${var.s3-bucket}" # arn resource 
-        }
+      {
+        "Effect": "Allow",
+        "Action": "s3:PutObject",
+        "Resource": "arn:aws:s3:::${var.s3_bucket}/*"
+      }
     ]
-})
+  })
 }

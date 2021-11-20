@@ -1,95 +1,84 @@
-variable volume-size {
+variable volume_size {
   type        = string
   default     = "10Gi"
   description = "Size of the backup volume storage. Should be enough big to fit backup files."
 }
 
-variable volume-storageClass {
+variable volume_storageClass {
   type        = string
   default     = "gp2"
   description = "Volume strage class AWS will be claimed for. No need for fast storage as this will be used once during backup."
 }
 
-variable mongodb-host {
+variable mongodb_host {
   type        = string
   default = "localhost"
   description = "Mongodb host name backup script will be taking data from."
 }
 
-variable mongodb-database {
+variable mongodb_database {
   type        = string
   default     = ""
   description = "Mongodb database to be backed up. All databases will be backed up if not specified."
 }
 
-variable mongodb-exclude-collections {
+variable mongodb_exclude_collections {
   type        = string
   default     = ""
   description = "Mongodb collections to be excluded from the backup. All collections will be backed up if not specified."
 }
 
-variable mongodb-username {
+variable mongodb_username {
   type        = string
   description = "Mongodb user name script will need to pull data from mongodb."
   sensitive = true
 }
 
-variable mongodb-password {
+variable mongodb_password {
   type        = string
   description = "Mongodb user password script will need to pull data from mongodb."
   sensitive = true
 }
 
-variable mongodb-port {
+variable mongodb_port {
   type        = string
   default     = "27017"
   description = "Mongodb user password script will need to pull data from mongodb."
 }
-variable s3-bucket {
+variable s3_bucket {
   type        = string
   description = "The bucket backups will be stored."
 }
-variable run-as-demond {
+variable run_as_daemon {
   type        = string
-  description = "run as demond"
+  default = "false"
+  description = "in case of true deployment will be created (as daemon) elwise kube cronJob will be created"
 }
-variable cron-schedule {
+variable cron_schedule {
   type        = string
   default     = "3 0 * * *"
   description = "Backup schedule, in crojob format. E.g. '3 0 * * *'"
 }
 
-variable max-backups {
+variable max_backups {
   type        = string
   default     = "30"
   description = "Max backups'"
 }
 
-variable init-backup {
+variable init_backup {
   type        = string
   default     = false
   description = "If enabled scripts will do backup right on the start and then according to the schedule."
 }
 
-variable init-restore {
+variable init_restore {
   type        = string
   default     = false
   description = "If enabled scripts will do restore right on the start and then according to the schedule."
 }
-variable aws-access-key-id {
-  type        = string
-  default     = "aws-access-key-id"
-  description = "AWS Access Key ID script will need to push backups into the S3 bucket."
-  sensitive   = true
-}
 
-variable aws-secret-access-key {
-  type        = string
-  default     = "aws-secret-access-key"
-  description = "AWS Secret Access Key script will need to push backups into the S3 bucket."
-  sensitive   = true
-}
-variable aws-default-region {
+variable aws_default_region {
   type        = string
   default     = "eu-central-1"
   description = "aws-default-region."
@@ -101,20 +90,44 @@ variable backup_user_name {
   description = "Backup user name for s3 bucket"
 }
 
-variable create-user {
-  type        = bool
-  default     = true
-  description = "create user."
+variable app_name {
+  type        = string
+  default     = "mongodb-backup-aws"
+  description = "Helm app/release name"
 }
 
-variable create-iam-user-login-profile {
-  type        = bool
-  default     = false
-  description = "create-iam-user-login-profile."
+variable app_version {
+  type        = string
+  default     = "0.1.0"
+  description = "Helm app/release version"
 }
 
-variable create-iam-access-key {
-  type        = bool
-  default     = true
-  description = "create-iam-access-key."
+variable namespace {
+  type        = string
+  default     = "default"
+  description = "Helm app/release namespace"
+}
+
+variable resources {
+  type        = object({
+    limits = object({
+      cpu = string
+      memory = string
+    })
+    requests = object({
+      cpu = string
+      memory = string
+    })
+  })
+  default     = {
+    limits = {
+      cpu    = "300m"
+      memory = "500Mi"
+    }
+    requests = {
+      cpu     = "300m"
+      memory  = "500Mi"
+    }
+  }
+  description = "Allows to set cpu/memory resources Limits/Requests for deployment/cronjob"
 }
