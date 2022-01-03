@@ -36,14 +36,14 @@ variable mongodb_exclude_collections {
 
 variable mongodb_username {
   type        = string
+  default     = ""
   description = "Mongodb user name script will need to pull data from mongodb."
-  sensitive = true
 }
 
 variable mongodb_password {
   type        = string
   description = "Mongodb user password script will need to pull data from mongodb."
-  sensitive = true
+  default     = ""
 }
 
 variable mongodb_port {
@@ -51,15 +51,18 @@ variable mongodb_port {
   default     = "27017"
   description = "Mongodb user password script will need to pull data from mongodb."
 }
+
 variable s3_bucket {
   type        = string
   description = "The bucket backups will be stored."
 }
+
 variable run_as_daemon {
   type        = string
   default = "false"
   description = "in case of true deployment will be created (as daemon) elwise kube cronJob will be created"
 }
+
 variable cron_schedule {
   type        = string
   default     = "3 0 * * *"

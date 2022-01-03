@@ -22,6 +22,24 @@ module mongodb_backup_minimal {
 }
 
 ```
+
+`mongodb_backup_connection_url`:
+
+```hcl
+module mongodb_backup_connection_url {
+    source  = "../../terraform-aws-mongodb-backup"
+
+    app_name   = "test"
+    mongodb_host                    = "localhost"
+    mongodb_uri                     = "mongodb+srv://..."
+    cron_schedule                   = "*/5 * * * *" 
+    run_as_daemon                   = "false"
+    init_backup                     = "false"
+    backup_user_name                = "backup_user"
+    s3_bucket                       = "mongoatlas-dev-backup" 
+}
+```
+
 `mongodb_backup_advanced`:
 
 
@@ -59,6 +77,7 @@ module mongodb_backup_advanced {
 | ------ | ------ |
 |`mongodb_host`|(required) This is gonna be Mongo database Host name|
 |`mongodb_port`|(Optional) Mongo database host Port|
+|`MONGODB_URI`|(Optional) Mongo connection uri|
 |`mongodb_username`|(required) Mongo database username|
 |`mongodb_password`|(required) Mongo database password|
 |`aws_default_region`|(required) Set aws default region. See [Amazon Web Services](https://console.aws.amazon.com/)|

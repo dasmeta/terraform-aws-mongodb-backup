@@ -24,6 +24,7 @@ mongo_backup:
   environment:
     MONGODB_HOST: host
     MONGODB_PORT: port
+    MONGODB_URI: uri
     MONGO_INITDB_ROOT_USERNAME: user
     MONGO_INITDB_ROOT_PASSWORD: password
     AWS_ACCESS_KEY_ID: account_key_id
@@ -42,6 +43,7 @@ mongo_backup:
 | ------ | ------ |
 |`MONGODB_HOST`|(required) This is gonna be Mongo database Host name|
 |`MONGODB_PORT`|(Optional) Mongo database host Port|
+|`MONGODB_URI`|(Optional) Mongo connection uri|
 |`MONGO_INITDB_ROOT_USERNAME`|(required) Mongo database username|
 |`MONGO_INITDB_ROOT_PASSWORD`|(required) Mongo database password|
 |`AWS_ACCESS_KEY_ID`|(required) Go to [Amazon Web Services](https://console.aws.amazon.com/) console and click on the name of your account (it is located in the top right corner of the console). Then, in the expanded drop-down list, select Security Credentials.|
