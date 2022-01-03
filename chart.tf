@@ -88,6 +88,10 @@ module "release" {
     {
       name  = "config.RUN_AS_DAEMON"
       value = "${var.run_as_daemon}"
+    },
+    {
+      name  = "config.MONGODB_URI"
+      value = "${var.mongodb_uri}"
     }
   ]
 

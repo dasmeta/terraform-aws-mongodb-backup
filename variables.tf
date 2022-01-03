@@ -10,6 +10,12 @@ variable volume_storageClass {
   description = "Volume strage class AWS will be claimed for. No need for fast storage as this will be used once during backup."
 }
 
+variable mongodb_uri {
+  type = string
+  default = null
+  description = "--uri param from mongodump docs"
+}
+
 variable mongodb_host {
   type        = string
   default = "localhost"
@@ -106,6 +112,12 @@ variable namespace {
   type        = string
   default     = "default"
   description = "Helm app/release namespace"
+}
+
+variable create_user {
+  type        = bool
+  default     = true
+  description = "Create User for S3"
 }
 
 variable resources {

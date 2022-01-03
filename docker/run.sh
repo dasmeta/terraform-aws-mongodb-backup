@@ -4,13 +4,21 @@ env > /etc/environment
 
 PORT=${MONGODB_PORT:-27017}
 HOST=${MONGODB_HOST:-"localhost"}
+HOST_URI=${MONGODB_URI:-""}
 AUTH_DB=${MONGODB_AUTH_DB:-"admin"}
 
 MONGODB_USER=${MONGODB_INITDB_ROOT_USERNAME:-""}
 MONGODB_PASS=${MONGODB_INITDB_ROOT_PASSWORD:-""}
 MONGODB_DATABASE=${MONGODB_DATABASE:-""}
 MONGODB_EXCLUDE_COLLECTIONS=${MONGODB_EXCLUDE_COLLECTIONS:-""}
+BACKUP_URI="mongodump --uri='${HOST_URI}' --out './backup/${BACKUP_NAME}'"
 BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${HOST} --port ${PORT} --authenticationDatabase ${AUTH_DB} ${EXTRA_OPTS}"
+
+rm -f /backup.sh
+cat <<EOF >> /backup.sh
+#!/bin/bash
+MAX_BACKUPS=${MAX_BACKUPS:-"30"}
+BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
 
 if [[ -n "${MONGODB_USER}" ]]; then
     BACKUP_CMD="${BACKUP_CMD}  --username ${MONGODB_USER}"
@@ -38,18 +46,21 @@ if [[ -n "${MONGODB_COLLECTIONS}" ]]; then
     done
 fi
 
-rm -f /backup.sh
-cat <<EOF >> /backup.sh
-#!/bin/bash
-MAX_BACKUPS=${MAX_BACKUPS:-"30"}
-BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
-
 echo "=> Backup started"
-if ${BACKUP_CMD} ; then
-    echo "   Backup succeeded"
-else
-    echo "   Backup failed"
-    rm -rf /backup/\${BACKUP_NAME}
+if [[ "${MONGODB_URI}" == "" ]]; then
+    if ${BACKUP_CMD} ; then
+        echo "   Backup succeeded"
+    else
+        echo "   Backup failed"
+        rm -rf /backup/\${BACKUP_NAME}
+    fi
+else 
+    if ${BACKUP_URI} ; then
+        echo "   Backup succeeded"
+    else
+        echo "   Backup failed"
+        rm -rf /backup/\${BACKUP_NAME}
+    fi
 fi
 
 if [ -n "\${MAX_BACKUPS}" ]; then

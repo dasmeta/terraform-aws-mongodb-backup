@@ -10,6 +10,7 @@ services:
     environment:
       MONGODB_HOST: host
       MONGODB_PORT: port
+      MONGODB_URI:  
       MONGO_INITDB_ROOT_USERNAME: user
       MONGO_INITDB_ROOT_PASSWORD: example
       AWS_ACCESS_KEY_ID: account_key_id
