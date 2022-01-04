@@ -7,6 +7,8 @@ HOST=${MONGODB_HOST:-"localhost"}
 HOST_URI=${MONGODB_URI:-""}
 AUTH_DB=${MONGODB_AUTH_DB:-"admin"}
 
+BACKUP_NAME=$(date +\%Y.\%m.\%d.\%H\%M\%S)
+
 MONGODB_USER=${MONGODB_INITDB_ROOT_USERNAME:-""}
 MONGODB_PASS=${MONGODB_INITDB_ROOT_PASSWORD:-""}
 MONGODB_DATABASE=${MONGODB_DATABASE:-""}
@@ -48,6 +50,7 @@ fi
 
 echo "=> Backup started"
 if [[ "${MONGODB_URI}" == "" ]]; then
+    echo "Backup CMD. ${BACKUP_CMD}"
     if ${BACKUP_CMD} ; then
         echo "   Backup succeeded"
     else
@@ -55,6 +58,8 @@ if [[ "${MONGODB_URI}" == "" ]]; then
         rm -rf /backup/\${BACKUP_NAME}
     fi
 else 
+    echo "Backup URI. ${BACKUP_URI}"
+    echo "BACKUP_NAME. ${BACKUP_NAME}"
     if ${BACKUP_URI} ; then
         echo "   Backup succeeded"
     else
