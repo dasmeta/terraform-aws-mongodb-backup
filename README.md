@@ -27,7 +27,7 @@ module mongodb_backup_minimal {
 
 ```hcl
 module mongodb_backup_connection_url {
-    source  = "../../terraform-aws-mongodb-backup"
+    source  = "dasmeta/mongodb-backup/aws"
 
     app_name   = "test"
     mongodb_host                    = "localhost"
