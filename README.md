@@ -77,7 +77,7 @@ module mongodb_backup_advanced {
 | ------ | ------ |
 |`mongodb_host`|(required) This is gonna be Mongo database Host name|
 |`mongodb_port`|(Optional) Mongo database host Port|
-|`MONGODB_URI`|(Optional) Mongo connection uri|
+|`mongodb_uri`|(Optional) Mongo connection uri|
 |`mongodb_username`|(required) Mongo database username|
 |`mongodb_password`|(required) Mongo database password|
 |`aws_default_region`|(required) Set aws default region. See [Amazon Web Services](https://console.aws.amazon.com/)|
