@@ -13,59 +13,59 @@ MONGODB_USER=${MONGODB_INITDB_ROOT_USERNAME:-""}
 MONGODB_PASS=${MONGODB_INITDB_ROOT_PASSWORD:-""}
 MONGODB_DATABASE=${MONGODB_DATABASE:-""}
 MONGODB_EXCLUDE_COLLECTIONS=${MONGODB_EXCLUDE_COLLECTIONS:-""}
-BACKUP_URI="mongodump --uri='${HOST_URI}' --out './backup/${BACKUP_NAME}'"
-BACKUP_CMD="mongodump --out /backup/"'${BACKUP_NAME}'" --gzip --host ${HOST} --port ${PORT} --authenticationDatabase ${AUTH_DB} ${EXTRA_OPTS}"
 
+
+# Prepare backup command
+BACKUP_CMD="mongodump --out './backup/${BACKUP_NAME}' --gzip"
+
+if [[ "${MONGODB_URI}" == "" ]]; then
+    BACKUP_CMD+=" --host ${HOST} --port ${PORT} --authenticationDatabase ${AUTH_DB} ${EXTRA_OPTS}"
+
+    if [[ -n "${MONGODB_USER}" ]]; then
+    BACKUP_CMD="${BACKUP_CMD}  --username ${MONGODB_USER}"
+    fi
+
+    if [[ -n "${MONGODB_PASS}" ]]; then
+        BACKUP_CMD="${BACKUP_CMD}  --password ${MONGODB_PASS}"
+    fi
+
+    if [[ -n "${MONGODB_DATABASE}" ]]; then
+        BACKUP_CMD="${BACKUP_CMD}  --db ${MONGODB_DATABASE}"
+    fi
+else
+    BACKUP_CMD+=" --uri='${HOST_URI}' ${EXTRA_OPTS}"
+fi
+
+if [[ -n "${MONGODB_EXCLUDE_COLLECTIONS}" ]]; then
+    for COLLECTON in $(echo "${MONGODB_EXCLUDE_COLLECTIONS}" | tr "," " ")
+    do
+        BACKUP_CMD+=" --excludeCollection ${COLLECTON}"
+    done
+fi
+
+if [[ -n "${MONGODB_COLLECTIONS}" ]]; then
+    for COLLECTON in $(echo "${MONGODB_COLLECTIONS}" | tr "," " ")
+    do
+        BACKUP_CMD+=" --collection ${COLLECTON}"
+    done
+fi
+
+
+echo "creating backup.sh file"
 rm -f /backup.sh
 cat <<EOF >> /backup.sh
 #!/bin/bash
 MAX_BACKUPS=${MAX_BACKUPS:-"30"}
 BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
 
-if [[ -n "${MONGODB_USER}" ]]; then
-    BACKUP_CMD="${BACKUP_CMD}  --username ${MONGODB_USER}"
-fi
-
-if [[ -n "${MONGODB_PASS}" ]]; then
-    BACKUP_CMD="${BACKUP_CMD}  --password ${MONGODB_PASS}"
-fi
-
-if [[ -n "${MONGODB_DATABASE}" ]]; then
-    BACKUP_CMD="${BACKUP_CMD}  --db ${MONGODB_DATABASE}"
-fi
-
-if [[ -n "${MONGODB_EXCLUDE_COLLECTIONS}" ]]; then
-    for COLLECTON in $(echo $MONGODB_EXCLUDE_COLLECTIONS | tr "," "\n")
-    do
-        BACKUP_CMD="${BACKUP_CMD} --excludeCollection ${COLLECTON}"
-    done
-fi
-
-if [[ -n "${MONGODB_COLLECTIONS}" ]]; then
-    for COLLECTON in $(echo $MONGODB_COLLECTIONS | tr "," "\n")
-    do
-        BACKUP_CMD="${BACKUP_CMD} --collection ${COLLECTON}"
-    done
-fi
-
 echo "=> Backup started"
-if [[ "${MONGODB_URI}" == "" ]]; then
-    echo "Backup CMD. ${BACKUP_CMD}"
-    if ${BACKUP_CMD} ; then
-        echo "   Backup succeeded"
-    else
-        echo "   Backup failed"
-        rm -rf /backup/\${BACKUP_NAME}
-    fi
-else 
-    echo "Backup URI. ${BACKUP_URI}"
-    echo "BACKUP_NAME. ${BACKUP_NAME}"
-    if ${BACKUP_URI} ; then
-        echo "   Backup succeeded"
-    else
-        echo "   Backup failed"
-        rm -rf /backup/\${BACKUP_NAME}
-    fi
+
+echo "Backup CMD. ${BACKUP_CMD}"
+if ${BACKUP_CMD} ; then
+    echo "   Backup succeeded"
+else
+    echo "   Backup failed"
+    rm -rf /backup/\${BACKUP_NAME}
 fi
 
 if [ -n "\${MAX_BACKUPS}" ]; then
@@ -85,7 +85,10 @@ else
     echo "=> Database backup was saved in /backup/\${BACKUP_NAME}"
 fi
 EOF
+echo "created backup.sh file"
 
+
+cat /backup.sh
 chmod +x /backup.sh
 chmod +x /restore.sh
 chmod +x /migrate_backup_aws.sh

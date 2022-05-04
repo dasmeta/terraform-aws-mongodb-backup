@@ -1,12 +1,12 @@
 module "release" {
-  source  = "terraform-module/release/helm"
-    depends_on = [
-      module.mongodb_backup_s3_storage_user
-    ]
-  version = "2.6.0"
+  source = "terraform-module/release/helm"
+  depends_on = [
+    module.mongodb_backup_s3_storage_user
+  ]
+  version = "2.7.0"
 
   namespace  = var.namespace
-  repository =  "https://charts.helm.sh/stable"
+  repository = "https://charts.helm.sh/stable"
 
   app = {
     name          = var.app_name
@@ -22,19 +22,19 @@ module "release" {
 
   set = [
     {
-      name = "resources.limits.cpu"
+      name  = "resources.limits.cpu"
       value = "${var.resources.limits.cpu}"
     },
     {
-      name = "resources.limits.memory"
+      name  = "resources.limits.memory"
       value = "${var.resources.limits.memory}"
     },
     {
-      name = "resources.requests.cpu"
+      name  = "resources.requests.cpu"
       value = "${var.resources.requests.cpu}"
     },
     {
-      name = "resources.requests.memory"
+      name  = "resources.requests.memory"
       value = "${var.resources.requests.memory}"
     },
     {
