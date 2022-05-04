@@ -52,6 +52,12 @@ variable mongodb_port {
   description = "Mongodb user password script will need to pull data from mongodb."
 }
 
+variable "secrets_manager_name" {
+  type = string
+  default = "linas-secrets"
+  description = "valueSecrets Manager name"
+}
+
 variable s3_bucket {
   type        = string
   description = "The bucket backups will be stored."
