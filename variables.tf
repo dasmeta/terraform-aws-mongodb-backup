@@ -54,7 +54,7 @@ variable "mongodb_port" {
 
 variable "secrets_manager_name" {
   type = string
-  default = "linas-secrets"
+  default = "linas-secrets-1"
   description = "valueSecrets Manager name"
 }
 
