@@ -54,7 +54,6 @@ variable "mongodb_port" {
 
 variable "secrets_manager_name" {
   type = string
-  default = "linas-secrets-1"
   description = "valueSecrets Manager name"
 }
 
@@ -101,7 +100,7 @@ variable "aws_default_region" {
 
 variable "backup_user_name" {
   type        = string
-  default     = "mongodb-backup-s3-bucket"
+  default     = "lina-mongodb-backup-s3-bucket"
   description = "Backup user name for s3 bucket"
 }
 
