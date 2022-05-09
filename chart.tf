@@ -1,5 +1,6 @@
 module "release" {
   source = "terraform-module/release/helm"
+
   depends_on = [
     module.mongodb_backup_s3_storage_user
   ]
@@ -47,7 +48,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_HOST"
-      value = "${var.mongodb_host}"
+      value = jsondecode(data.aws_secretsmanager_secret_version.uri-host-secrets.secret_string)["host"]
     },
     {
       name  = "config.MONGODB_PORT"
@@ -91,7 +92,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_URI"
-      value = "${var.mongodb_uri}"
+      value = jsondecode(data.aws_secretsmanager_secret_version.uri-host-secrets.secret_string)["uri"]
     }
   ]
 
@@ -106,11 +107,11 @@ module "release" {
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_USERNAME"
-      value = "${var.mongodb_username}"
+      value = jsondecode(data.aws_secretsmanager_secret_version.username-password-secrets.secret_string)["username"]
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_PASSWORD"
-      value = "${var.mongodb_password}"
+      value = jsondecode(data.aws_secretsmanager_secret_version.username-password-secrets.secret_string)["password"]
     },
   ]
 }

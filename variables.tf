@@ -95,13 +95,13 @@ variable "aws_default_region" {
 
 variable "backup_user_name" {
   type        = string
-  default     = "lina-db-mongodb-backup-s3-bucket"
+  default     = "lina-user-db-mongodb-backup-s3-bucket"
   description = "Backup user name for s3 bucket"
 }
 
 variable "app_name" {
   type        = string
-  default     = "mongodb-backup-aws"
+  default     = "mongodb-backup-aws-lina"
   description = "Helm app/release name"
 }
 
