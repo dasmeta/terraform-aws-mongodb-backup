@@ -48,7 +48,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_HOST"
-      value = jsondecode(data.aws_secretsmanager_secret_version.uri-host-secrets.secret_string)["host"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"]
     },
     {
       name  = "config.MONGODB_PORT"
@@ -92,7 +92,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_URI"
-      value = jsondecode(data.aws_secretsmanager_secret_version.uri-host-secrets.secret_string)["uri"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_uri"]
     }
   ]
 
@@ -107,11 +107,11 @@ module "release" {
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_USERNAME"
-      value = jsondecode(data.aws_secretsmanager_secret_version.username-password-secrets.secret_string)["username"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"]
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_PASSWORD"
-      value = jsondecode(data.aws_secretsmanager_secret_version.username-password-secrets.secret_string)["password"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"]
     },
   ]
 }
