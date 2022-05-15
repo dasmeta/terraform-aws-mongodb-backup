@@ -71,26 +71,6 @@ module mongodb_backup_advanced {
 
 ```
 
-`secrets-manager`
-```hcl
-data aws_secretsmanager_secret "uri-host" {
-    name = "mongodb-uhkv"
-}
-
-data "aws_secretsmanager_secret_version" "uri-host-secrets" {
-  secret_id = data.aws_secretsmanager_secret.uri-host.id
-}
-```
-
-`variable`
-```hcl
-variable "mongodb_host" {
-  type        = string
-  default     = jsondecode(data.aws_secretsmanager_secret_version.uri-host-secrets.secret_string)["host"]
-  description = "If enabled scripts will do backup right on the start and then according to the schedule."
-}
-```
-
 ### Environment variables
 
 #### `Note: Some variables are required` 
