@@ -137,9 +137,12 @@ data "aws_secretsmanager_secret_version" "secrets" {
 module mongodb_backup_minimal {
     source  = "dasmeta/mongodb-backup/aws"
 
-    mongodb_host                    = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"]
-    mongodb_username                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"]
-    mongodb_password                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"]
+    mongodb_host = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"] : var.mongodb_host
+
+    mongodb_username = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"] : var.mongodb_username
+
+    mongodb_password = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"] : var.mongodb_password
+    
     cron_schedule                   = "0 3 * * *" # “every day at 03:00 am”
     run_as_daemon                   = "false"
     init_backup                     = "false"
