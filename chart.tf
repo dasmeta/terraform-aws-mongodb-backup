@@ -1,6 +1,5 @@
 module "release" {
   source = "terraform-module/release/helm"
-
   depends_on = [
     module.mongodb_backup_s3_storage_user
   ]
