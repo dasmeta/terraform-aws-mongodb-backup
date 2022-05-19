@@ -48,7 +48,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_HOST"
-      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"]
+      value =  jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_host"] : "${var.mongodb_host}"
     },
     {
       name  = "config.MONGODB_PORT"
@@ -92,7 +92,7 @@ module "release" {
     },
     {
       name  = "config.MONGODB_URI"
-      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_uri"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_uri"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_uri"]  : "${var.mongodb_uri}"
     }
   ]
 
@@ -107,11 +107,11 @@ module "release" {
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_USERNAME"
-      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_username"] : "${var.mongodb_username}"
     },
     {
       path  = "config.MONGODB_INITDB_ROOT_PASSWORD"
-      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"]
+      value = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"] ? jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["mongodb_password"] : "${var.mongodb_password}"
     },
   ]
 }
