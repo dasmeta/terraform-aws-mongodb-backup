@@ -1,5 +1,5 @@
 data aws_secretsmanager_secret "mongodb-secrets-repo" {
-    name = var.secret_id
+    name = "lina/db/mongodb"
 }
 
 data "aws_secretsmanager_secret_version" "secrets" {

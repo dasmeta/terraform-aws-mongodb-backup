@@ -71,63 +71,10 @@ module mongodb_backup_advanced {
 
 ```
 
-If you want to use AWS Secrets Manager as a keystore for connecting to MongoDB, you can create `secrets-manager` module like belov:
-
-
-```hcl
-module "secrets-manager" {
-  source = "git::https://github.com/adamyanlina/secrets-manager-terraform.git//modules/secrets-manager"
-
-  secrets = {
-    (var.secret_id) = {
-      description = var.secret_description
-      secret_key_value = {
-        mongodb_uri = var.mongodb_uri
-        mongodb_host = var.mongodb_host
-        mongodb_username = var.mongodb_username
-        mongodb_password = var.mongodb_password
-      }
-      recovery_window_in_days = var.recovery_window_in_days
-    }
-  }
-
-  tags = {
-    Owner       = "Admin"
-    Environment = "dev"
-    Terraform   = true
-  }
-}
-
-```
-Create `variables` like below:
-
-```hcl
-
-variable "secret_id" {
-  description = "Secret ID"
-  type = string
-  default = "lina/db/mongodb"
-}
-
-variable "secret_description" {
-    description = "Secret Description"
-    type = string
-    default = "SM Description"
-}
-
-variable "recovery_window_in_days" {
-  description = "Specifies the number of days that AWS Secrets Manager waits before it can delete the secret. This value can be 0 to force deletion without recovery or range from 7 to 30 days."
-  type = number
-  default = 7
-}
-
-```
-
-Example `secrets-manager` module usage in `mongodb_backup_minimal`
-
+Example of using MongoDB keys if available from AWS Secrets Manager 
 ```hcl
 data aws_secretsmanager_secret "mongodb-secrets-repo" {
-    name = var.secret_id
+    name = "lina/db/mongodb"
 }
 
 data "aws_secretsmanager_secret_version" "secrets" {
