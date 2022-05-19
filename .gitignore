@@ -1,9 +1,3 @@
 .idea
-.vscode
 backup
-
-.terraform/
-.terraform.lock.hcl
-
-terraform.tfstate
-terraform.tfstate.backup
+.vscode
