@@ -9,10 +9,10 @@ To backup a Mongo DB container you simply have to build Docker image from follow
 
 
     docker build -t image_name .
-    
+
 Please note the backup will be written to /backup by default, so you might want to mount that directory from your host.
 
-## Useful example via docker compose 
+## Useful example via docker compose
 
 ```
 mongo_backup:
@@ -38,7 +38,7 @@ mongo_backup:
 ```
 ### Environment variables
 
-#### `Note: Some variables are required` 
+#### `Note: Some variables are required`
 | Environment Variables | Description |
 | ------ | ------ |
 |`MONGODB_HOST`|(required) This is gonna be Mongo database Host name|
