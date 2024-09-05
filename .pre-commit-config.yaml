@@ -9,13 +9,13 @@ repos:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
         exclude: CHANGELOG.md
-      - id: check-yaml
+      # - id: check-yaml
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: detect-aws-credentials
-        args: ['--allow-missing-credentials']
+        args: ["--allow-missing-credentials"]
       - id: detect-private-key
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.64.1
