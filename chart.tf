@@ -3,7 +3,7 @@ module "release" {
   depends_on = [
     module.mongodb_backup_s3_storage_user
   ]
-  version = "2.7.0"
+  version = "2.8.2"
 
   namespace  = var.namespace
   repository = "https://charts.helm.sh/stable"
