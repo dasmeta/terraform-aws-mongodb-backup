@@ -1,6 +1,6 @@
 module "mongodb_backup_s3_storage_user" {
   source  = "dasmeta/modules/aws//modules/aws-iam-user"
-  version = "0.36.8"
+  version = "2.17.2"
 
   create_user   = var.create_user
   username      = var.backup_user_name
